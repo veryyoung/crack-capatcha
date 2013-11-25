@@ -23,6 +23,6 @@ public class getModel {
 			}
 
 		}
-		return "";
+		return "0";
 	}
 }
