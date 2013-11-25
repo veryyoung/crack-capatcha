@@ -4,58 +4,25 @@ import java.awt.image.BufferedImage;
 
 public class getModel {
 
-	public static void main(String[] args) {
-		for (int i = 0; i < 100; i++) {
-			BufferedImage image = Tools
-					.getImage("checkCode/code_" + i + ".jpg");
-			Filter.dotFilter(image);
-			Filter.blackAndWhiteFilter(image);
-			BufferedImage img = Tools.getSingleCode(image);
-			System.out.print("code_" + i + ".jpg == ");
-			compare(img);
-			System.out.println("");
-		}
-	}
-
-	public static void compare(BufferedImage image) {
-		BufferedImage checkCode[] = Tools.getCheckCodes(image);
-		for (int t = 0; t < 4; t++) {
-			int[] result = new int[10];
-			boolean ckFlg = false;
-			int num = -1;
-			for (int i = 0; i < 10; i++) {
-				num = -1;
-				ckFlg = true;
-				BufferedImage testImage = Tools.getImage("model" + "/" + i
-						+ ".bmp");
-				if (testImage == null) {
-					continue;
-				}
-
-				for (int y = 0; y < checkCode[t].getHeight(); ++y) {
-					for (int x = 0; x < checkCode[t].getWidth(); ++x) {
-
-						int expRGB = Tools.pixelConvert(checkCode[t].getRGB(x,
-								y));
-						int cmpRGB = Tools.pixelConvert(testImage.getRGB(x, y));
-						if (expRGB == cmpRGB) {
-							result[i]++;
-						}
-					}
-				}
-				if (result[i] > 90) {
-					ckFlg = true;
-					num = i;
-					break;
-				}
+	public static String compare() {
+		for (int i = 0; i < 10; i++) {
+			System.out.println(i);
+			BufferedImage testImage = Tools
+					.getImage("model" + "/" + i + ".bmp");
+			if (testImage == null) {
+				continue;
 			}
-			if (ckFlg) {
-				System.out.print(num);
-				ckFlg = false;
-			} else {
-				ckFlg = false;
-				System.out.print("x");
+			for (int x = 0; x < testImage.getWidth(); x++) {
+				System.out.print("{");
+				for (int y = 0; y < testImage.getHeight() - 1; y++) {
+					int cmpRGB = Tools.pixelConvert(testImage.getRGB(x, y));
+					System.out.print(cmpRGB + ",");
+				}
+				System.out.print(Tools.pixelConvert(testImage.getRGB(x, 11)));
+				System.out.println("},");
 			}
+
 		}
+		return "";
 	}
 }
